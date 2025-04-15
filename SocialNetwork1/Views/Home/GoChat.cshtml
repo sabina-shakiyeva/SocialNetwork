@@ -1,0 +1,71 @@
+﻿@model ChatViewModel
+
+<h1>Your Chat</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            @foreach (var item in Model.Chats)
+            {
+                <a href="/Home/GoChat/@item.ReceiverId">
+                    <div style="display:flex;cursor:pointer;width:300px;border:2px solid springgreen;
+margin-top:15px;padding:15px;border-radius:10px">
+                        <img style="width:70px;height:70px;border-radius:50%;" src="\images\@item.Receiver.Image" />
+                        <section style="margin-left:20px;">
+                            <h4>@item.Receiver.UserName</h4>
+                            @if (item.Receiver.IsOnline)
+                            {
+                                <h5 style="color:springgreen"><b>Online</b></h5>
+                            }
+                            else
+                            {
+                                <h5 style="color:red"><b>Not Available</b></h5>
+                            }
+                        </section>
+                    </div>
+                </a>
+            }
+        </div>
+        <div class="col-md-9" style="overflow-y:auto;height:100%;" >
+            <h1>Click Chat to chat chat messages</h1>
+            <div id="currentMessages">
+                @foreach (var message in Model.CurrentChat.Messages)
+                {
+                    @if (Model.CurrentUserId == message.SenderId)
+                    {
+                        <section style="display:flex;margin-top:25px;border:4px solid springgreen;
+margin-left:150px;border-radius:20px 0 0 20px;padding:20px;width:50%">
+
+                            <h5>@message.Content</h5>
+                            <p>@message.DateTime.ToShortDateString()</p>
+                            <p>@message.DateTime.ToShortTimeString()</p>
+                        </section>
+
+                    }
+                    else
+                    {
+                        <section style="display:flex;margin-top:25px;border:4px solid deepskyblue;
+margin-left:0;border-radius:0 20px 20px 0;padding:20px;width:50%">
+
+                            <h5>@message.Content</h5>
+                            <p>@message.DateTime.ToShortDateString()</p>
+                            <p>@message.DateTime.ToShortTimeString()</p>
+                        </section>
+
+                    }
+                }
+            </div>
+            <section style="margin-top:20px;">
+                <input id="message-input" type="text" />
+                <a class="btn btn-primary" onclick="SendMessage('@Model.CurrentReceiver','@Model.CurrentUserId')">Send Message</a>
+            </section>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="~/js/signalr/dist/browser/signalr.js" asp-append-version="true"></script>
+<script src="~/js/chat.js" asp-append-version="true"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
